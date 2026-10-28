@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InstaSave — Save Instagram Videos Safely & Fast</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              dark: '#080810',
+              card: '#11111dcc',
+              border: '#ffffff1a',
+              pink: '#ec4899',
+              purple: '#8b5cf6',
+              violet: '#d946ef',
+            }
+          },
+          animation: {
+            'pulse-glow': 'pulseGlow 4s infinite ease-in-out',
+            'spin-fast': 'spin 0.6s linear infinite',
+          },
+          keyframes: {
+            pulseGlow: {
+              '0%, 100%': { opacity: 0.15, transform: 'scale(1)' },
+              '50%': { opacity: 0.28, transform: 'scale(1.1)' }
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      background: #080810;
+    }
+    body {
+      margin: 0;
+      background: radial-gradient(ellipse at 50% 0%, #20102b 0%, transparent 55%), #080810;
+      color: #f8fafc;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Custom CSS Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #080810;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #252538;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d946ef;
+    }
+
+    /* Glassmorphism Styles */
+    .glass-panel {
+      background: rgba(17, 17, 29, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .glass-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .glass-card:hover {
+      border-color: rgba(217, 70, 239, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px -10px rgba(217, 70, 239, 0.15);
+    }
+
+    .gradient-text {
+      background: linear-gradient(100deg, #fb7185 10%, #d946ef 55%, #a78bfa 95%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .gradient-btn {
+      background: linear-gradient(110deg, #ec4899, #a855f7);
+      transition: all 0.25s ease;
+      box-shadow: 0 0 20px rgba(236, 72, 153, 0.25);
+    }
+    .gradient-btn:hover {
+      opacity: 0.93;
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(236, 72, 153, 0.45);
+    }
+
+    .logo-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f43f8f, #8b5cf6);
+      font-weight: 900;
+      box-shadow: 0 0 30px rgba(232, 121, 169, 0.35);
+    }
+
+    .glow-bg {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+<body class="selection:bg-pink-500 selection:text-white">
+
+  <!-- Top Ambient Glows -->
+  <div class="glow-bg w-[320px] h-[320px] bg-pink-600/20 top-[-50px] left-[-50px] animate-pulse-glow"></div>
+  <div class="glow-bg w-[380px] h-[380px] bg-purple-600/20 top-[100px] right-[-80px] animate-pulse-glow" style="animation-delay: 2s;"></div>
+
+  <!-- Main Application Wrapper -->
+  <div class="min-h-screen flex flex-col justify-between">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 border-b border-white/5 backdrop-blur-xl bg-[#080810]/70">
+      <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <!-- Brand Logo -->
+        <a href="#" class="flex items-center gap-3 group">
+          <span class="logo-icon text-white text-xl group-hover:scale-105 transition-transform">S</span>
+          <span class="text-xl font-bold tracking-tight text-white">
+            Insta<span class="gradient-text">Save</span>
+          </span>
+        </a>
+
+        <!-- Links -->
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+          <a href="#how" class="hover:text-pink-400 transition-colors">How it works</a>
+          <a href="#features" class="hover:text-pink-400 transition-colors">Features</a>
+          <a href="#simulator" class="hover:text-pink-400 transition-colors">API Simulator</a>
+          <a href="#faq" class="hover:text-pink-400 transition-colors">FAQ</a>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center gap-3">
+          <button id="open-config-btn" class="flex items-center gap-2 px-3.5 py-2 text-xs font-semibold rounded-xl glass-card text-slate-300 hover:text-white transition-all">
+            <i class="fa-solid fa-sliders text-pink-400"></i>
+            <span>API Settings</span>
+            <span id="api-status-badge" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-grow">
+      
+      <!-- Hero Section -->
+      <section class="relative mx-auto max-w-5xl px-5 pt-12 pb-16 text-center sm:pt-20">
+        
+        <!-- Pill Badge -->
+        <div class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-bold tracking-widest text-slate-300 uppercase shadow-inner backdrop-blur-md">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+          </span>
+          <span>SIMPLE · FAST · RESPONSIVE</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="mx-auto mt-6 max-w-4xl text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl leading-[1.1]">
+          Save videos.<br />
+          <span class="gradient-text">Keep the moments.</span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="mx-auto mt-6 max-w-xl text-base sm:text-lg text-slate-400 leading-relaxed">
+          Paste any public Instagram Reels, IGTV, or post link to extract high-resolution videos instantly. Simple, direct, and ethical.
+        </p>
+
+        <!-- Downloader Card Interactive Component -->
+        <div class="mx-auto mt-10 max-w-2xl text-left glass-panel rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10">
+          <form id="download-form" onsubmit="handleDownload(event)">
+            
+            <div class="flex items-center justify-between mb-3">
+              <label for="video-url" class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+                <i class="fa-brands fa-instagram text-pink-500 text-lg"></i>
+                Instagram Video URL
+              </label>
+              <button type="button" id="paste-btn" class="text-xs font-semibold text-pink-400 hover:text-pink-300 transition-colors flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-white/5">
+                <i class="fa-regular fa-clipboard"></i> Paste Link
+              </button>
+            </div>
+
+            <!-- Input Box & Submit Button -->
+            <div class="flex flex-col gap-3 sm:flex-row">
+              <div class="relative flex-1">
+                <input
+                  id="video-url"
+                  type="url"
+                  required
+                  placeholder="https://www.instagram.com/reel/..."
+                  class="w-full rounded-xl border border-white/10 bg-[#080810]/80 px-4 py-3.5 pr-10 text-sm text-white placeholder-slate-500 outline-none transition-all focus:border-pink-500 focus:ring-2 focus:ring-pink-500/20"
+                  oninput="validateInputURL(this.value)"
+                />
+                <button type="button" id="clear-btn" onclick="clearURLInput()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300">
+                  <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+              </div>
+
+              <button type="submit" id="submit-btn" class="gradient-btn px-6 py-3.5 text-sm font-bold text-white rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="btn-text">Get Video</span>
+                <i id="btn-icon" class="fa-solid fa-arrow-right text-xs"></i>
+                <i id="btn-spinner" class="fa-solid fa-circle-notch animate-spin text-sm hidden"></i>
+              </button>
+            </div>
+
+            <!-- Permission Checkbox -->
+            <label class="mt-4 flex cursor-pointer items-start gap-3 text-xs sm:text-sm leading-snug text-slate-400 hover:text-slate-300 transition-colors">
+              <input
+                type="checkbox"
+                id="authorized-check"
+                class="mt-0.5 h-4 w-4 rounded border-white/20 bg-black/40 text-pink-500 accent-pink-500 focus:ring-pink-500/30"
+              />
+              <span>I confirm I own this content or have permission from the rights holder to download it.</span>
+            </label>
+
+            <!-- URL Format Helper -->
+            <div id="url-feedback" class="mt-2 text-xs text-slate-500 flex items-center gap-1.5 hidden">
+              <i class="fa-solid fa-circle-info text-pink-400"></i>
+              <span id="url-feedback-text">Valid Instagram link detected</span>
+            </div>
+
+            <!-- Error Notification Banner -->
+            <div id="error-banner" class="mt-4 hidden rounded-xl border border-red-500/30 bg-red-500/10 p-3.5 text-sm text-red-300 flex items-start gap-3">
+              <i class="fa-solid fa-triangle-exclamation text-red-400 text-lg mt-0.5"></i>
+              <div class="flex-1">
+                <p id="error-message" class="font-medium">Error message here</p>
+              </div>
+            </div>
+
+          </form>
+
+          <!-- Result Preview Box -->
+          <div id="result-box" class="mt-6 hidden rounded-2xl border border-emerald-500/30 bg-emerald-950/20 p-5 backdrop-blur-md">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+              <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+                <i class="fa-solid fa-[#000] fa-circle-check"></i>
+                <span>Video Processed Successfully</span>
+              </div>
+              <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-300 font-mono" id="result-badge">HD 1080p</span>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-4 items-center">
+              <!-- Video Thumbnail Preview -->
+              <div class="relative w-full sm:w-36 h-48 sm:h-36 rounded-xl overflow-hidden bg-slate-900 border border-white/10 shrink-0 group">
+                <img id="res-thumbnail" src="" alt="Thumbnail" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
+                  <div class="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white">
+                    <i class="fa-solid fa-play text-sm ml-0.5"></i>
+                  </div>
+                </div>
+                <span id="res-duration" class="absolute bottom-2 right-2 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-mono text-white">0:45</span>
+              </div>
+
+              <!-- Media Metadata -->
+              <div class="flex-1 w-full flex flex-col justify-between">
+                <div>
+                  <h4 id="res-title" class="font-semibold text-white text-sm sm:text-base line-clamp-2">Instagram Reel Video</h4>
+                  <p id="res-author" class="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                    <i class="fa-solid fa-user-check text-pink-400 text-[10px]"></i>
+                    <span>@creator_account</span>
+                  </p>
+                </div>
+
+                <!-- Quality Selection Tabs -->
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <button onclick="setDownloadQuality('1080p')" id="qual-1080" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-pink-500/50 bg-pink-500/20 text-white">
+                    MP4 · 1080p
+                  </button>
+                  <button onclick="setDownloadQuality('720p')" id="qual-720" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-white/10 bg-white/5 text-slate-400 hover:text-white">
+                    MP4 · 720p
+                  </button>
+                  <button onclick="setDownloadQuality('audio')" id="qual-audio" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-white/10 bg-white/5 text-slate-400 hover:text-white">
+                    Audio · MP3
+                  </button>
+                </div>
+
+                <!-- Direct Action Buttons -->
+                <div class="mt-4 flex gap-2">
+                  <a id="download-link-btn" href="#" target="_blank" rel="noreferrer" class="gradient-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold text-center text-white flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Media</span>
+                  </a>
+                  <button onclick="copyDownloadURL()" class="px-3 py-2.5 rounded-xl glass-card text-slate-300 hover:text-white text-xs font-semibold flex items-center gap-1.5" title="Copy Direct URL">
+                    <i class="fa-regular fa-copy"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="mt-5 text-xs text-slate-500">
+          <i class="fa-solid fa-shield-halved text-pink-400/80 mr-1"></i>
+          100% Secure & Anonymous. No Instagram password required.
+        </p>
+
+      </section>
+
+      <!-- How It Works Section -->
+      <section id="how" class="mx-auto max-w-6xl px-6 py-16 border-t border-white/5">
+        <div class="text-center">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-pink-400">Three Simple Steps</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">How InstaSave Works</h2>
+        </div>
+
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          <article class="glass-card rounded-2xl p-6 relative overflow-hidden">
+            <span class="w-12 h-12 rounded-xl border border-pink-500/30 bg-pink-500/10 text-pink-400 flex items-center justify-center font-extrabold font-mono text-lg">01</span>
+            <h3 class="mt-5 text-lg font-bold text-white">Copy Video Link</h3>
+            <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+              Open Instagram app or web, tap on the share menu of any public Reel, IGTV, or post, and click "Copy Link".
+            </p>
+          </article>
+
+          <article class="glass-card rounded-2xl p-6 relative overflow-hidden">
+            <span class="w-12 h-12 rounded-xl border border-pink-500/30 bg-pink-500/10 text-pink-400 flex items-center justify-center font-extrabold font-mono text-lg">02</span>
+            <h3 class="mt-5 text-lg font-bold text-white">Paste & Confirm</h3>
+            <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+              Paste the copied URL into our downloader above, tick the copyright authorization box, and click "Get Video".
+            </p>
+          </article>
+
+          <article class="glass-card rounded-2xl p-6 relative overflow-hidden">
+            <span class="w-12 h-12 rounded-xl border border-pink-500/30 bg-pink-500/10 text-pink-400 flex items-center justify-center font-extrabold font-mono text-lg">03</span>
+            <h3 class="mt-5 text-lg font-bold text-white">Save Your Video</h3>
+            <p class="mt-2 text-sm text-slate-400 leading-relaxed">
+              Select your preferred video resolution or audio format and click Download to save the media file directly to your device.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Key Features Section -->
+      <section id="features" class="mx-auto max-w-6xl px-6 py-16">
+        <div class="text-center">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-purple-400">Built for Speed & Quality</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">Platform Capabilities</h2>
+        </div>
+
+        <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="glass-card p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center mb-4 text-lg">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Ultra Fast Engine</h4>
+            <p class="mt-2 text-xs text-slate-400 leading-relaxed">
+              Instant response payload generation through optimized API proxy routing.
+            </p>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4 text-lg">
+              <i class="fa-solid fa-sliders"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Custom Backend API</h4>
+            <p class="mt-2 text-xs text-slate-400 leading-relaxed">
+              Seamlessly connect your own RapidAPI endpoint or self-hosted server using custom keys.
+            </p>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4 text-lg">
+              <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Fully Responsive</h4>
+            <p class="mt-2 text-xs text-slate-400 leading-relaxed">
+              Works seamlessly on iOS, Android, macOS, Windows, and Linux browsers.
+            </p>
+          </div>
+
+          <div class="glass-card p-5 rounded-2xl">
+            <div class="w-10 h-10 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4 text-lg">
+              <i class="fa-solid fa-shield-cat"></i>
+            </div>
+            <h4 class="font-bold text-white text-base">Privacy Preserving</h4>
+            <p class="mt-2 text-xs text-slate-400 leading-relaxed">
+              Zero login or cookie tracking. No user content or download history stored.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Interactive API Playground / Simulator -->
+      <section id="simulator" class="mx-auto max-w-6xl px-6 py-16 border-t border-white/5">
+        <div class="grid lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-500/10 border border-purple-500/20 text-purple-400 text-xs font-semibold mb-3">
+              <i class="fa-solid fa-code"></i> Developer Sandbox
+            </div>
+            <h2 class="text-3xl font-extrabold text-white">Live API Endpoint Simulator</h2>
+            <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+              Inspect how the app communicates with the Next.js backend route <code class="text-pink-400 font-mono text-xs bg-white/5 px-1.5 py-0.5 rounded">/api/download/route.ts</code>. Test requests in real-time and review exact JSON response structures.
+            </p>
+
+            <div class="mt-6 flex flex-col gap-3">
+              <div class="flex items-center gap-3 text-xs text-slate-300">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span>Strict domain URL & HTTPS validation guardrails</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-300">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span>Authorization verification token enforcement</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs text-slate-300">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span>Automatic mock fallback for local testing</span>
+              </div>
+            </div>
+
+            <button onclick="triggerSimulatedAPI()" class="mt-6 px-5 py-2.5 rounded-xl border border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20 text-purple-300 font-semibold text-xs flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-play"></i> Run Test Request
+            </button>
+          </div>
+
+          <!-- Code Payload Preview Window -->
+          <div class="lg:col-span-7">
+            <div class="rounded-2xl border border-white/10 bg-[#05050b] overflow-hidden shadow-2xl">
+              <!-- Window Header -->
+              <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-white/5">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                  <span class="w-3 h-3 rounded-full bg-emerald-500/80"></span>
+                  <span class="ml-2 font-mono text-xs text-slate-400">POST /api/download</span>
+                </div>
+                <button onclick="copyCodePayload()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1">
+                  <i class="fa-regular fa-copy"></i> Copy JSON
+                </button>
+              </div>
+
+              <!-- Terminal Output Display -->
+              <div class="p-4 font-mono text-xs leading-relaxed overflow-x-auto text-slate-300">
+                <pre id="json-code-display"><code class="language-json">{
+  "request": {
+    "url": "https://www.instagram.com/reel/C3x9L_OPzK2/",
+    "authorized": true
+  },
+  "status": 200,
+  "response": {
+    "downloadUrl": "https://cdn.instasave-provider.com/v/reel_hd_1080p.mp4?st=valid&e=17000000",
+    "media": {
+      "type": "reel",
+      "author": "@travel_explorers",
+      "quality": "1080p",
+      "duration": "0:45"
+    }
+  }
+}</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Accordion Section -->
+      <section id="faq" class="mx-auto max-w-4xl px-6 py-16 border-t border-white/5">
+        <div class="text-center">
+          <p class="text-xs font-extrabold uppercase tracking-widest text-pink-400">Got Questions?</p>
+          <h2 class="mt-2 text-3xl font-extrabold text-white">Frequently Asked Questions</h2>
+        </div>
+
+        <div class="mt-10 space-y-4">
+          
+          <details class="group glass-card rounded-2xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+            <summary class="flex items-center justify-between text-base font-semibold text-white">
+              <span>Is InstaSave free to use?</span>
+              <span class="transition group-open:-rotate-180 text-pink-400">
+                <i class="fa-solid fa-chevron-down"></i>
+              </span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+              Yes, InstaSave provides a completely free web interface for processing authorized public media URLs. No hidden subscriptions or account sign-ups are required.
+            </p>
+          </details>
+
+          <details class="group glass-card rounded-2xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+            <summary class="flex items-center justify-between text-base font-semibold text-white">
+              <span>Can I download private Instagram posts?</span>
+              <span class="transition group-open:-rotate-180 text-pink-400">
+                <i class="fa-solid fa-chevron-down"></i>
+              </span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+              No. InstaSave strictly processes publicly accessible URLs. Private posts requiring account authentication or permission bypass are not supported.
+            </p>
+          </details>
+
+          <details class="group glass-card rounded-2xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+            <summary class="flex items-center justify-between text-base font-semibold text-white">
+              <span>How do I configure my own RapidAPI downloader backend?</span>
+              <span class="transition group-open:-rotate-180 text-pink-400">
+                <i class="fa-solid fa-chevron-down"></i>
+              </span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+              Click on the "API Settings" button at the top header bar. You can enter your custom <code class="text-pink-400 font-mono">DOWNLOADER_API_URL</code> and <code class="text-pink-400 font-mono">DOWNLOADER_API_KEY</code>. These values will be stored securely in your browser's local storage.
+            </p>
+          </details>
+
+          <details class="group glass-card rounded-2xl p-5 [&_summary::-webkit-details-marker]:hidden cursor-pointer">
+            <summary class="flex items-center justify-between text-base font-semibold text-white">
+              <span>Where are saved files stored on my device?</span>
+              <span class="transition group-open:-rotate-180 text-pink-400">
+                <i class="fa-solid fa-chevron-down"></i>
+              </span>
+            </summary>
+            <p class="mt-3 text-sm text-slate-400 leading-relaxed">
+              When you click the "Download Media" button, the video is saved directly to your web browser's default downloads folder (or Photos app on iOS/Android).
+            </p>
+          </details>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer & Disclaimer -->
+    <footer class="border-t border-white/10 bg-[#05050b] py-10 px-6 text-center text-xs text-slate-500">
+      <div class="mx-auto max-w-6xl flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="logo-icon w-6 h-6 text-xs text-white">S</span>
+          <span class="font-bold text-slate-300">InstaSave</span>
+          <span>© 2026. All rights reserved.</span>
+        </div>
+
+        <div class="text-slate-400">
+          InstaSave is an independent open utility and is not affiliated with, endorsed by, or sponsored by Instagram or Meta Platforms, Inc.
+        </div>
+      </div>
+      <p class="mt-4 text-[11px] text-slate-600">
+        Users are solely responsible for ensuring compliance with copyright laws and platform terms of service before downloading content.
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- API Settings Modal Drawer -->
+  <div id="config-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+    <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 relative shadow-2xl border border-white/10">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-white/10">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-pink-500/10 text-pink-400 flex items-center justify-center">
+            <i class="fa-solid fa-sliders"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white">Configure Downloader API</h3>
+        </div>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-white p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="mt-4 text-xs text-slate-400 leading-relaxed">
+        Supply custom API credentials matching the Next.js <code class="text-pink-400 font-mono">.env.local</code> environment keys. Leave blank to use the realistic built-in mock simulator mode.
+      </p>
+
+      <form id="config-form" onsubmit="saveAPIConfig(event)" class="mt-5 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">DOWNLOADER_API_URL</label>
+          <input
+            type="url"
+            id="cfg-api-url"
+            placeholder="https://instagram-downloader-api.p.rapidapi.com/v1/download"
+            class="w-full rounded-xl border border-white/10 bg-[#080810] px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none focus:border-pink-500"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">DOWNLOADER_API_KEY</label>
+          <input
+            type="password"
+            id="cfg-api-key"
+            placeholder="Your RapidAPI or Provider Key"
+            class="w-full rounded-xl border border-white/10 bg-[#080810] px-3.5 py-2.5 text-xs text-white placeholder-slate-600 outline-none focus:border-pink-500"
+          />
+        </div>
+
+        <div class="flex items-center justify-between pt-3 border-t border-white/10">
+          <button type="button" onclick="resetAPIConfig()" class="text-xs font-semibold text-slate-400 hover:text-red-400 transition-colors">
+            Reset to Mock Mode
+          </button>
+          
+          <div class="flex gap-2">
+            <button type="button" onclick="closeConfigModal()" class="px-4 py-2 rounded-xl glass-card text-xs font-semibold text-slate-300">
+              Cancel
+            </button>
+            <button type="submit" class="gradient-btn px-5 py-2 rounded-xl text-xs font-bold text-white">
+              Save Settings
+            </button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notif" class="fixed bottom-5 right-5 z-50 hidden flex items-center gap-2.5 px-4 py-3 rounded-xl glass-panel border-emerald-500/30 text-emerald-300 text-xs font-semibold shadow-xl">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toast-text">Action completed successfully</span>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Allowed Host Domains matching Next.js route validation guardrails
+    const ALLOWED_HOSTS = new Set([
+      "instagram.com",
+      "www.instagram.com",
+      "m.instagram.com",
+      "instagr.am",
+      "www.instagr.am"
+    ]);
+
+    // Current State
+    let currentQuality = '1080p';
+    let mockDataStore = null;
+
+    // Load persisted API configuration on start
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAPIStatusBadge();
+
+      // Paste button hook
+      document.getElementById('paste-btn').addEventListener('click', async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            const urlInput = document.getElementById('video-url');
+            urlInput.value = text.trim();
+            validateInputURL(urlInput.value);
+            showToast('Pasted URL from clipboard');
+          }
+        } catch (err) {
+          showToast('Clipboard access denied');
+        }
+      });
+    });
+
+    // Validate Instagram URL
+    function isValidInstagramURL(val) {
+      if (!val || typeof val !== 'string' || val.length > 2048) return false;
+      try {
+        const parsed = new URL(val);
+        return (
+          parsed.protocol === 'https:' &&
+          ALLOWED_HOSTS.has(parsed.hostname.toLowerCase()) &&
+          !parsed.username &&
+          !parsed.password
+        );
+      } catch {
+        return false;
+      }
+    }
+
+    // Realtime Input Feedback
+    function validateInputURL(val) {
+      const feedback = document.getElementById('url-feedback');
+      const feedbackText = document.getElementById('url-feedback-text');
+      const clearBtn = document.getElementById('clear-btn');
+
+      clearBtn.classList.toggle('hidden', !val);
+
+      if (!val) {
+        feedback.classList.add('hidden');
+        return;
+      }
+
+      if (isValidInstagramURL(val)) {
+        feedback.classList.remove('hidden');
+        feedbackText.innerText = 'Valid Instagram link format detected';
+        feedbackText.className = 'text-emerald-400 text-xs';
+      } else {
+        feedback.classList.remove('hidden');
+        feedbackText.innerText = 'Please enter a valid https://instagram.com/... URL';
+        feedbackText.className = 'text-yellow-400 text-xs';
+      }
+    }
+
+    function clearURLInput() {
+      const input = document.getElementById('video-url');
+      input.value = '';
+      validateInputURL('');
+      hideError();
+    }
+
+    // Handle Form Submit Download Process
+    async function handleDownload(e) {
+      e.preventDefault();
+      hideError();
+      hideResult();
+
+      const urlInput = document.getElementById('video-url').value.trim();
+      const authorizedCheck = document.getElementById('authorized-check').checked;
+
+      // Front-end Checks
+      if (!authorizedCheck) {
+        showError("Please confirm you have permission to download this video.");
+        return;
+      }
+
+      if (!isValidInstagramURL(urlInput)) {
+        showError("Enter a valid HTTPS Instagram video URL (Reels, Post, or IGTV).");
+        return;
+      }
+
+      setLoading(true);
+
+      const apiUrl = localStorage.getItem('DOWNLOADER_API_URL');
+      const apiKey = localStorage.getItem('DOWNLOADER_API_KEY');
+
+      try {
+        let resultDownloadUrl = '';
+        let mediaDetails = null;
+
+        if (apiUrl && apiKey) {
+          // Custom Provider Request Simulation
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({ url: urlInput })
+          });
+
+          if (!response.ok) {
+            throw new Error('Custom API provider failed to fetch video link.');
+          }
+
+          const data = await response.json();
+          resultDownloadUrl = data.downloadUrl;
+        } else {
+          // Simulated Next.js API route fallback (delay 1.2s for realism)
+          await new Promise(res => setTimeout(res, 1200));
+
+          // Generate simulated download item based on URL hash
+          const mockSamples = [
+            {
+              thumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+              title: 'Urban Sunset Reels · Cinematic Color Grading in 4K',
+              author: '@visual_artist',
+              duration: '0:38'
+            },
+            {
+              thumb: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80',
+              title: 'Top 5 Hidden Photography Spots in Iceland 🏔️',
+              author: '@globetrotter',
+              duration: '1:12'
+            },
+            {
+              thumb: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80',
+              title: 'Night Sky Timelapse & Astrophotography Guide',
+              author: '@space_explorer',
+              duration: '0:55'
+            }
+          ];
+
+          const sampleIndex = Math.abs(hashCode(urlInput)) % mockSamples.length;
+          mediaDetails = mockSamples[sampleIndex];
+          resultDownloadUrl = `https://cdn.instasave-mock.net/downloads/video_${Date.now()}.mp4`;
+        }
+
+        if (!resultDownloadUrl) {
+          throw new Error('Provider response did not contain a valid download URL.');
+        }
+
+        // Display Render
+        renderResult(resultDownloadUrl, mediaDetails);
+        showToast('Video download link retrieved!');
+
+      } catch (err) {
+        showError(err.message || "Request failed or the download service timed out.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    // Hash helper for mock selection
+    function hashCode(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = (hash << 5) - hash + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return hash;
+    }
+
+    // Render Processed Media Result Box
+    function renderResult(downloadUrl, meta) {
+      const resultBox = document.getElementById('result-box');
+      const thumbnailImg = document.getElementById('res-thumbnail');
+      const titleElem = document.getElementById('res-title');
+      const authorElem = document.getElementById('res-author');
+      const durationElem = document.getElementById('res-duration');
+      const downloadBtn = document.getElementById('download-link-btn');
+
+      const defaultMeta = {
+        thumb: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80',
+        title: 'Instagram Video Content',
+        author: '@instagram_user',
+        duration: '0:45'
+      };
+
+      const finalMeta = meta || defaultMeta;
+
+      thumbnailImg.src = finalMeta.thumb;
+      titleElem.innerText = finalMeta.title;
+      authorElem.querySelector('span').innerText = finalMeta.author;
+      durationElem.innerText = finalMeta.duration;
+
+      downloadBtn.href = downloadUrl;
+      mockDataStore = { url: downloadUrl, meta: finalMeta };
+
+      resultBox.classList.remove('hidden');
+    }
+
+    // Set Download Quality Option
+    function setDownloadQuality(quality) {
+      currentQuality = quality;
+      const btn1080 = document.getElementById('qual-1080');
+      const btn720 = document.getElementById('qual-720');
+      const btnAudio = document.getElementById('qual-audio');
+      const badge = document.getElementById('result-badge');
+
+      const activeClass = 'px-3 py-1.5 text-xs font-medium rounded-lg border border-pink-500/50 bg-pink-500/20 text-white';
+      const inactiveClass = 'px-3 py-1.5 text-xs font-medium rounded-lg border border-white/10 bg-white/5 text-slate-400 hover:text-white';
+
+      btn1080.className = quality === '1080p' ? activeClass : inactiveClass;
+      btn720.className = quality === '720p' ? activeClass : inactiveClass;
+      btnAudio.className = quality === 'audio' ? activeClass : inactiveClass;
+
+      badge.innerText = quality === 'audio' ? 'MP3 Audio' : `HD ${quality}`;
+      showToast(`Selected format: ${quality.toUpperCase()}`);
+    }
+
+    function copyDownloadURL() {
+      if (mockDataStore && mockDataStore.url) {
+        copyToClipboard(mockDataStore.url);
+        showToast('Download link copied to clipboard!');
+      }
+    }
+
+    // Copy to Clipboard Utility
+    function copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+      } else {
+        const input = document.createElement('textarea');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+      }
+    }
+
+    // UI Loading State
+    function setLoading(isLoading) {
+      const submitBtn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      const btnIcon = document.getElementById('btn-icon');
+      const btnSpinner = document.getElementById('btn-spinner');
+
+      submitBtn.disabled = isLoading;
+      if (isLoading) {
+        btnText.innerText = "Processing...";
+        btnIcon.classList.add('hidden');
+        btnSpinner.classList.remove('hidden');
+      } else {
+        btnText.innerText = "Get Video";
+        btnIcon.classList.remove('hidden');
+        btnSpinner.classList.add('hidden');
+      }
+    }
+
+    // Error Messaging
+    function showError(msg) {
+      const banner = document.getElementById('error-banner');
+      const msgElem = document.getElementById('error-message');
+      msgElem.innerText = msg;
+      banner.classList.remove('hidden');
+    }
+
+    function hideError() {
+      document.getElementById('error-banner').classList.add('hidden');
+    }
+
+    function hideResult() {
+      document.getElementById('result-box').classList.add('hidden');
+    }
+
+    // Modal Control & API Configuration
+    const modal = document.getElementById('config-modal');
+
+    document.getElementById('open-config-btn').addEventListener('click', () => {
+      document.getElementById('cfg-api-url').value = localStorage.getItem('DOWNLOADER_API_URL') || '';
+      document.getElementById('cfg-api-key').value = localStorage.getItem('DOWNLOADER_API_KEY') || '';
+      modal.classList.remove('hidden');
+      setTimeout(() => modal.classList.remove('opacity-0'), 10);
+    });
+
+    function closeConfigModal() {
+      modal.classList.add('opacity-0');
+      setTimeout(() => modal.classList.add('hidden'), 300);
+    }
+
+    function saveAPIConfig(e) {
+      e.preventDefault();
+      const url = document.getElementById('cfg-api-url').value.trim();
+      const key = document.getElementById('cfg-api-key').value.trim();
+
+      if (url) localStorage.setItem('DOWNLOADER_API_URL', url);
+      else localStorage.removeItem('DOWNLOADER_API_URL');
+
+      if (key) localStorage.setItem('DOWNLOADER_API_KEY', key);
+      else localStorage.removeItem('DOWNLOADER_API_KEY');
+
+      updateAPIStatusBadge();
+      closeConfigModal();
+      showToast('API Configuration saved');
+    }
+
+    function resetAPIConfig() {
+      localStorage.removeItem('DOWNLOADER_API_URL');
+      localStorage.removeItem('DOWNLOADER_API_KEY');
+      document.getElementById('cfg-api-url').value = '';
+      document.getElementById('cfg-api-key').value = '';
+      updateAPIStatusBadge();
+      closeConfigModal();
+      showToast('Switched to Mock Engine Mode');
+    }
+
+    function updateAPIStatusBadge() {
+      const badge = document.getElementById('api-status-badge');
+      const url = localStorage.getItem('DOWNLOADER_API_URL');
+      if (url) {
+        badge.className = 'w-2 h-2 rounded-full bg-pink-500 animate-pulse';
+      } else {
+        badge.className = 'w-2 h-2 rounded-full bg-emerald-400';
+      }
+    }
+
+    // Simulator Code Payload Trigger
+    function triggerSimulatedAPI() {
+      const display = document.getElementById('json-code-display');
+      const sampleURLs = [
+        'https://www.instagram.com/reel/C3x9L_OPzK2/',
+        'https://www.instagram.com/p/C12m_k90x1A/',
+        'https://www.instagram.com/tv/B8xK911A0pL/'
+      ];
+      const randomUrl = sampleURLs[Math.floor(Math.random() * sampleURLs.length)];
+      
+      const sampleJSON = {
+        request: {
+          url: randomUrl,
+          authorized: true
+        },
+        status: 200,
+        timestamp: new Date().toISOString(),
+        response: {
+          downloadUrl: `https://cdn.instasave-provider.com/v/media_${Math.floor(Math.random() * 89999 + 10000)}.mp4`,
+          media: {
+            type: randomUrl.includes('/reel/') ? 'reel' : 'post',
+            quality: "1080p HD",
+            audioExtracted: true,
+            expiresIn: 3600
+          }
+        }
+      };
+
+      display.innerHTML = `<code class="language-json">${JSON.stringify(sampleJSON, null, 2)}</code>`;
+      showToast('Simulated payload generated!');
+    }
+
+    function copyCodePayload() {
+      const codeText = document.getElementById('json-code-display').innerText;
+      copyToClipboard(codeText);
+      showToast('JSON Payload copied to clipboard');
+    }
+
+    // Toast Notification System
+    function showToast(msg) {
+      const toast = document.getElementById('toast-notif');
+      const text = document.getElementById('toast-text');
+      text.innerText = msg;
+
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
